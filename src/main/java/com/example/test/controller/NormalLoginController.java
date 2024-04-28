@@ -6,6 +6,7 @@ import com.example.test.DTO.UserRequestDTO;
 import com.example.test.entity.UserEntity;
 import com.example.test.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +24,16 @@ public class NormalLoginController {
         return ResponseEntity.ok(loginService.login(requestDto));
     }
     @PostMapping("/signUp")
-    public ResponseEntity<UserEntity> response(@RequestBody SignUpDTO dto){
+    public ResponseEntity<String> response(@RequestBody SignUpDTO dto){
         System.out.println(dto.getId1());
         System.out.println(dto.getPw1());
         System.out.println(dto.getNickname1());
-        return ResponseEntity.ok(loginService.NormalSignUp(dto.getId1(), dto.getPw1(),dto.getNickname1()));
+        String message = loginService.NormalSignUp(dto.getId1(), dto.getPw1(),dto.getNickname1(), dto.getTier1(), dto.getRiot_id1());
+        if(message.equals("성공")){
+            return ResponseEntity.ok("성공");
+        }
+        else{
+            return ResponseEntity.ok(message);
+        }
     }
 }

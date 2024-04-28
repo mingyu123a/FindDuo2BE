@@ -9,6 +9,6 @@ import lombok.Setter;
 public class FindResponseDTO {
 
     private String id;
-    private int tier;
+    private String tier;
 
 }

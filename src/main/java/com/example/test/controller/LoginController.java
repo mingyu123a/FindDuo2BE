@@ -22,6 +22,7 @@ public class LoginController{
     private KakaoService kakaoService;
 
     @Autowired
+    
     private LoginService loginService;
     @GetMapping("") //callback으로 들어온 GET요청
     public void getKakaoAuthCode(HttpServletRequest request)throws Exception{//httpServletRequest객체로 uil내의 파라미터,. path 등에 접근 가능

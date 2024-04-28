@@ -21,8 +21,8 @@ public class UserEntity {
 
 
 
-    private int tier;
-    private String riot_id;
+    private String tier;
+    private String riotId;
     private String nickname;
     private String nickname1;
     private String refreshToken;

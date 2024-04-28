@@ -5,6 +5,7 @@ import com.example.test.DTO.UserRequestDTO;
 import com.example.test.entity.UserEntity;
 import com.example.test.jwt.TokenProvider;
 import com.example.test.repository.UserRepository;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 import static com.example.test.entity.Authority.ROLE_USER;
 
@@ -33,7 +36,19 @@ public class LoginService {
     private UserRepository userRepository;
     @Autowired
     private TokenProvider tokenProvider;
-    public UserEntity NormalSignUp(String id1, String pw1, String nickname1) {
+    public String NormalSignUp(String id1, String pw1, String nickname1,String tier1, String riot_id1) {
+        final boolean isExistEmail = userRepository.existsByLoginId(id1);
+        final boolean isExistNickname = userRepository.existsByNickname1(id1);
+        final boolean isExistRiotId = userRepository.existsByRiotId(id1);
+        if (isExistEmail) {
+            return "email 중복";
+        }
+        else if(isExistRiotId){
+            return "riotId 중복";
+        }
+        else if(isExistNickname){
+            return "닉네임 중복";
+        }
         try{
             UserEntity userEntity = new UserEntity();
             userEntity.setLoginId(id1);
@@ -42,9 +57,12 @@ public class LoginService {
             System.out.println(encodedPwd);
             userEntity.setPassword(encodedPwd);
             userEntity.setNickname(nickname1);
+            userEntity.setTier(tier1);
+            userEntity.setRiotId(riot_id1);
 
 
-            return userRepository.save(userEntity);
+            userRepository.save(userEntity);
+            return "성공";
         }
         catch (Exception e){
             System.out.println("error");
@@ -66,7 +84,6 @@ public class LoginService {
         } catch (AuthenticationException e) {
             // 여기서 인증 실패 처리
             System.out.println("Authentication failed: " + e.getMessage());
-
             return null;
 
         }

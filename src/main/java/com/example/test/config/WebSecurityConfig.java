@@ -39,7 +39,10 @@ public class WebSecurityConfig {
                                 .requestMatchers("/callback/**").permitAll()
                                 .requestMatchers("/history/MatchHistory/**").permitAll()
                                 .requestMatchers("/history/**").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/history/rankGameTier").permitAll()
+                                .requestMatchers("/history/ranking").permitAll()
+                                .anyRequest().permitAll()
+
                         );
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();

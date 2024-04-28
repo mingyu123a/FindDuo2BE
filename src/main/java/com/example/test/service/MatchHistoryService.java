@@ -57,11 +57,11 @@ public class MatchHistoryService {
         System.out.println(response.getStatusCode());
         String responseBody = response.getBody();
         System.out.println(responseBody);
-        String[] matchList = new String[20];
+        String[] matchList = new String[10];
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             matchList[i] = jsonNode.get(i).asText();
         }
         return matchList;
@@ -106,20 +106,65 @@ public class MatchHistoryService {
         JsonNode jsonNode = jsonNode2.get(0);
         String tier =  jsonNode.get("tier").asText();
         String rank =  jsonNode.get("rank").asText();
-        String summonerName =  jsonNode.get("summonerName").asText();
+      //  String summonerName =  jsonNode.get("summonerName").asText();
+        // 쓸 필요가 없다
         String leaguePoints =  jsonNode.get("leaguePoints").asText();
         String wins =  jsonNode.get("wins").asText();
         String losses =  jsonNode.get("losses").asText();
         Map<String,String> tierResponse = new HashMap<>();
         tierResponse.put("tier", tier);
         tierResponse.put("rank", rank);
-        tierResponse.put("summonerName", summonerName);
+      //  tierResponse.put("summonerName", summonerName);
+        // 쓸 필요가 없다
         tierResponse.put("leaguPoints",leaguePoints);
         tierResponse.put("wins", wins);
         tierResponse.put("losses",losses);
         return tierResponse;
 
     }
+    public String[] getPuuidBySummonerId(String []encryptedSummonerId) throws JsonProcessingException {
+        String [] gameNameTagLine = new String[10];
+        for (int i = 0; i < 10 ; i++) {
+            HttpHeaders headers = new HttpHeaders();
+            RestTemplate restTem = new RestTemplate();
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<String> response = restTem.exchange(
+                    RIOT_URL_KR + "/lol/summoner/v4/summoners/" + encryptedSummonerId[i] + "?api_key=" + RIOT_API_KEY,
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+            System.out.println(response);
+            //여기서 puuid 뽑아서 다시 String배열에 저장
+            String responseBody = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+            String puuid = jsonNode.get("puuid").asText();
+            System.out.println(puuid);
+            HttpHeaders headers2 = new HttpHeaders();
+            RestTemplate restTem2 = new RestTemplate();
+            HttpEntity<MultiValueMap<String, String>> httpEntity2 = new HttpEntity<>(headers);
+            ResponseEntity<String> response2 = restTem.exchange(
+                    RIOT_URL_ASIA + "/riot/account/v1/accounts/by-puuid/" + puuid + "?api_key=" + RIOT_API_KEY,
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+            String responseBody2 = response2.getBody();
+            System.out.println(responseBody2);
+            ObjectMapper objectMapper2 = new ObjectMapper();
+            JsonNode jsonNode2 = objectMapper2.readTree(responseBody2);
+            String gameName = jsonNode2.get("gameName").asText();
+            String TagLine = jsonNode2.get("tagLine").asText();
+            System.out.println(gameName+TagLine);
+            gameNameTagLine[i] = gameName + "#"+TagLine;
+
+        }
+        return gameNameTagLine;
+
+    }
+        //String 배열을 받아서 새로운 함수 하나 작성 puuid -> gameName + TagLine받는거
+
     /*
     public void getMatchHistoryInform(String[] matchList) throws JsonProcessingException, InterruptedException {
         Thread.sleep(3000);
@@ -142,4 +187,3 @@ public class MatchHistoryService {
     }*/
 
 }
-

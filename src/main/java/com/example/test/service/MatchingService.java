@@ -14,7 +14,7 @@ public class MatchingService {
     public FindResponseDTO findTeam(int id){
         UserEntity entity = userRepository.findById(id);
         FindResponseDTO dto = new FindResponseDTO();
-        dto.setId(entity.getRiot_id());
+        dto.setId(entity.getRiotId());
         dto.setTier(entity.getTier());
         return dto;
     }
