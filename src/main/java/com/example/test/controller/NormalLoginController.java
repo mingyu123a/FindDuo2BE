@@ -21,7 +21,13 @@ public class NormalLoginController {
     private LoginService loginService;
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody UserRequestDTO requestDto) {
-        return ResponseEntity.ok(loginService.login(requestDto));
+        TokenDTO tokenDTO = loginService.login(requestDto);
+        if(tokenDTO !=null){
+            return ResponseEntity.ok(tokenDTO);
+        }
+        else{
+            return ResponseEntity.ofNullable(null);
+        }
     }
     @PostMapping("/signUp")
     public ResponseEntity<String> response(@RequestBody SignUpDTO dto){
