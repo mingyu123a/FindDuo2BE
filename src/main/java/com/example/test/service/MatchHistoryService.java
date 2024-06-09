@@ -90,9 +90,9 @@ public class MatchHistoryService {
     }
     public Map<String,String> getRankGameTier(String encryptedSummonerId) throws JsonProcessingException, InterruptedException {
         HttpHeaders headers = new HttpHeaders();
-        RestTemplate restTem = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTem.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 RIOT_URL_KR + "/lol/league/v4/entries/by-summoner/" + encryptedSummonerId + "?api_key=" + RIOT_API_KEY,
                 HttpMethod.GET,
                 httpEntity,
@@ -101,26 +101,37 @@ public class MatchHistoryService {
         System.out.println(response.getStatusCode());
         String responseBody = response.getBody();
         System.out.println(responseBody);
+
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode2 = objectMapper.readTree(responseBody);
+
+        // Check if jsonNode2 is null or empty
+        if (jsonNode2 == null || !jsonNode2.isArray() || jsonNode2.size() == 0) {
+            throw new IllegalArgumentException("Response JSON is null or empty");
+        }
+
         JsonNode jsonNode = jsonNode2.get(0);
-        String tier =  jsonNode.get("tier").asText();
-        String rank =  jsonNode.get("rank").asText();
-      //  String summonerName =  jsonNode.get("summonerName").asText();
-        // 쓸 필요가 없다
-        String leaguePoints =  jsonNode.get("leaguePoints").asText();
-        String wins =  jsonNode.get("wins").asText();
-        String losses =  jsonNode.get("losses").asText();
+
+        // Check if jsonNode is null
+        if (jsonNode == null) {
+            throw new IllegalArgumentException("JSON node is null");
+        }
+
+        // Safely retrieve fields from jsonNode
+        String tier = jsonNode.has("tier") ? jsonNode.get("tier").asText() : "";
+        String rank = jsonNode.has("rank") ? jsonNode.get("rank").asText() : "";
+        String leaguePoints = jsonNode.has("leaguePoints") ? jsonNode.get("leaguePoints").asText() : "";
+        String wins = jsonNode.has("wins") ? jsonNode.get("wins").asText() : "";
+        String losses = jsonNode.has("losses") ? jsonNode.get("losses").asText() : "";
+
         Map<String,String> tierResponse = new HashMap<>();
         tierResponse.put("tier", tier);
         tierResponse.put("rank", rank);
-      //  tierResponse.put("summonerName", summonerName);
-        // 쓸 필요가 없다
-        tierResponse.put("leaguPoints",leaguePoints);
+        tierResponse.put("leaguePoints", leaguePoints);
         tierResponse.put("wins", wins);
-        tierResponse.put("losses",losses);
-        return tierResponse;
+        tierResponse.put("losses", losses);
 
+        return tierResponse;
     }
     public String[] getPuuidBySummonerId(String []encryptedSummonerId) throws JsonProcessingException {
         String [] gameNameTagLine = new String[10];
