@@ -18,10 +18,6 @@ public class TestController {
     }
 
 
-    public int sum(int x, int y){
-        return x+y;
-    }
-
     @GetMapping("/view/{id}")
     public TestEntity getBoard(@PathVariable int id) {
         return service.getBoard(id);

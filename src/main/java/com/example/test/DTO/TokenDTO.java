@@ -13,4 +13,5 @@ public class TokenDTO {
     private String grantType;
     private String accessToken;
     private Long tokenExpiresIn;
+
 }

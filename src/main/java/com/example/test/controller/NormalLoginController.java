@@ -34,7 +34,7 @@ public class NormalLoginController {
         System.out.println(dto.getId1());
         System.out.println(dto.getPw1());
         System.out.println(dto.getNickname1());
-        String message = loginService.NormalSignUp(dto.getId1(), dto.getPw1(),dto.getNickname1(), dto.getTier1(), dto.getRiot_id1());
+        String message = loginService.NormalSignUp(dto.getId1(), dto.getPw1(),dto.getNickname1(), dto.getTier1(), dto.getRiotTag());
         if(message.equals("성공")){
             return ResponseEntity.ok("성공");
         }

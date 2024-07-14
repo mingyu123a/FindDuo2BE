@@ -2,6 +2,7 @@ package com.example.test.config;
 
 import com.example.test.jwt.JwtAccessDeniedHandler;
 import com.example.test.jwt.JwtAuthenticationEntryPoint;
+import com.example.test.jwt.JwtFilter;
 import com.example.test.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
 @Configuration
@@ -30,6 +32,7 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).formLogin(Customizer.withDefaults())
@@ -42,8 +45,10 @@ public class WebSecurityConfig {
                                 .requestMatchers("/history/rankGameTier").permitAll()
                                 .requestMatchers("/history/ranking").permitAll()
                                 .anyRequest().permitAll()
-
                         );
+
+        JwtFilter jwtFilter = new JwtFilter(tokenProvider);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }

@@ -107,7 +107,13 @@ public class MatchHistoryService {
 
         // Check if jsonNode2 is null or empty
         if (jsonNode2 == null || !jsonNode2.isArray() || jsonNode2.size() == 0) {
-            throw new IllegalArgumentException("Response JSON is null or empty");
+            Map<String,String> tierResponse = new HashMap<>();
+            tierResponse.put("tier", "언랭");
+            tierResponse.put("rank", "");
+            tierResponse.put("leaguePoints", "0");
+            tierResponse.put("wins", "0");
+            tierResponse.put("losses", "0");
+            return tierResponse;
         }
 
         JsonNode jsonNode = jsonNode2.get(0);
