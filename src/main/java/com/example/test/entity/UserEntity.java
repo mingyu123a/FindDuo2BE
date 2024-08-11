@@ -33,9 +33,6 @@ public class UserEntity {
     @JoinColumn(name = "community")
     private List<CommunityEntity> community = new ArrayList<>();
 //
-    @OneToMany
-    @JoinColumn(name = "champion_analysis")
-    private List<ChampionAnalysisEntity> championAnalysis = new ArrayList<>();
 
     @Builder
     public UserEntity(){

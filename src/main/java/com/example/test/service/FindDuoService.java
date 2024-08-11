@@ -3,7 +3,9 @@ package com.example.test.service;
 import com.example.test.entity.UserEntity;
 import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Optional;
 
@@ -25,8 +27,11 @@ public class FindDuoService {
             String riotId = user.getRiotId();
             System.out.println("Found Riot ID: " + riotId);
 
+
         } else {
             System.out.println("User not found for email: " + email);
         }
     }
+
+
 }

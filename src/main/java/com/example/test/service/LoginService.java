@@ -49,6 +49,7 @@ public class LoginService {
         else if(isExistNickname){
             return "닉네임 중복";
         }
+        //패스워드 문자검사 -> n자이상 m자 이하 특수문자 포함되었는지 확인이 필요.
         try{
             UserEntity userEntity = new UserEntity();
             userEntity.setLoginId(id1);
@@ -59,8 +60,6 @@ public class LoginService {
             userEntity.setNickname(nickname1);
             userEntity.setTier(tier1);
             userEntity.setRiotId(riot_id1);
-
-
             userRepository.save(userEntity);
             return "성공";
         }

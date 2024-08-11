@@ -31,6 +31,7 @@ public class NormalLoginController {
     }
     @PostMapping("/signUp")
     public ResponseEntity<String> response(@RequestBody SignUpDTO dto){
+        System.out.println("회원가입 시도! ");
         System.out.println(dto.getId1());
         System.out.println(dto.getPw1());
         System.out.println(dto.getNickname1());

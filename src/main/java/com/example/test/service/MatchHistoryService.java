@@ -22,6 +22,7 @@ public class MatchHistoryService {
 
     public String getPuuid(String gameName, String tagLine) throws JsonProcessingException, InterruptedException {
         String a = gameName + "/" + tagLine;
+        System.out.println(a);
         HttpHeaders headers = new HttpHeaders();
         //HttpHeader 담기, 위의 과정과 동일
         RestTemplate restTem = new RestTemplate();
@@ -178,6 +179,42 @@ public class MatchHistoryService {
 
         }
         return gameNameTagLine;
+
+    }
+    public String[][] getChampMateryTop(String puuid) throws JsonProcessingException, InterruptedException {
+        HttpHeaders headers = new HttpHeaders();
+        RestTemplate restTem = new RestTemplate();
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTem.exchange(
+                RIOT_URL_KR + "/lol/champion-mastery/v4/champion-masteries/by-puuid/" + puuid + "/top?api_key=" + RIOT_API_KEY,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        System.out.println(response.getStatusCode());
+        String [] championIdArr = new String[3];
+        String [] championPointArr = new String[3];
+
+        String responseBody = response.getBody();
+        System.out.println(responseBody);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody); //얘로 String -> JSON
+        JsonNode jsonNode1=  jsonNode.get(0);
+        championIdArr[0] = String.valueOf(jsonNode1.get("championId"));
+        championPointArr[0] = String.valueOf(jsonNode1.get("championPoints"));
+
+        JsonNode jsonNode2=  jsonNode.get(1);
+        championIdArr[1] = String.valueOf(jsonNode2.get("championId"));
+        championPointArr[1] = String.valueOf(jsonNode2.get("championPoints"));
+
+        JsonNode jsonNode3=  jsonNode.get(2);
+        championIdArr[2] = String.valueOf(jsonNode3.get("championId"));
+        championPointArr[2] = String.valueOf(jsonNode3.get("championPoints"));
+        String [][] championInfoResult = new String[2][3];
+        championInfoResult[0] = championIdArr;
+        championInfoResult[1] = championPointArr;
+        return championInfoResult;
+
 
     }
         //String 배열을 받아서 새로운 함수 하나 작성 puuid -> gameName + TagLine받는거
