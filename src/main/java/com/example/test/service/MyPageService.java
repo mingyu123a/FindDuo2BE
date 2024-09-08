@@ -20,8 +20,7 @@ public class MyPageService {
     private MatchHistoryService matchHistoryService;
 
 
-    public MyPageDTO mypage() throws JsonProcessingException, InterruptedException {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    public MyPageDTO userInfo(String email) throws JsonProcessingException, InterruptedException {
         System.out.println("마이페이지 조회");
         System.out.println("접근유저 email: "+email);
         Optional<UserEntity> userEntityOptional = userRepository.findByLoginId(email);

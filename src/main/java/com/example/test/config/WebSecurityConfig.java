@@ -44,6 +44,9 @@ public class WebSecurityConfig {
                                 .requestMatchers("/history/**").permitAll()
                                 .requestMatchers("/history/rankGameTier").permitAll()
                                 .requestMatchers("/history/ranking").permitAll()
+                                .requestMatchers("/riot.txt").permitAll()
+                                .requestMatchers("/find/findduo").permitAll()
+                                .requestMatchers("/api/config").permitAll()
                                 .anyRequest().permitAll()
                         );
 

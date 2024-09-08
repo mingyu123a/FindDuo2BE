@@ -22,7 +22,8 @@ public class myPageController {
     private MyPageService myPageService;
     @GetMapping("/mypage")
     public MyPageDTO getMypage() throws JsonProcessingException, InterruptedException {
-        MyPageDTO myPageDTO = myPageService.mypage();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        MyPageDTO myPageDTO = myPageService.userInfo(email);
         return myPageDTO;
     }
 }
