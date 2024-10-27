@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/riot.txt").permitAll()
                                 .requestMatchers("/find/findduo").permitAll()
                                 .requestMatchers("/api/config").permitAll()
+                                .requestMatchers("/oauth/callback").permitAll()
                                 .anyRequest().permitAll()
                         );
         JwtFilter jwtFilter = new JwtFilter(tokenProvider);

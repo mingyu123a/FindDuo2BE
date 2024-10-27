@@ -9,10 +9,13 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class RsoService {
     private String RIOT_AUTH_URL = "https://auth.riotgames.com";
+    private static final String USER_INFO_URL = "https://auth.riotgames.com/userinfo";
+
     public void getRsoInfo(String code) throws Exception {
         try {//Auth코드로 AccessToken과 RefreshToken을 받는 작업.
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
             //헤더에 데이터 담기 ContentType = application/x-www-form-unencoded;charset
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -36,6 +39,29 @@ public class RsoService {
 
             String responseBody = responseEntity.getBody();
             System.out.println(responseBody);
+            //accessToken 뽑아
+            String accessToken ="";
+            // 헤더 설정
+            HttpHeaders headers2 = new HttpHeaders();
+            headers2.setBearerAuth(accessToken);  // Bearer 토큰 설정
+            headers2.setContentType(MediaType.APPLICATION_JSON);
+
+            // HttpEntity 생성 (요청 헤더 포함)
+            HttpEntity<String> entity = new HttpEntity<>(headers2);
+
+            try {
+                // API 요청 및 응답
+                ResponseEntity<String> response = restTemplate.exchange(
+                        USER_INFO_URL,
+                        HttpMethod.GET,
+                        entity,
+                        String.class
+                );
+
+                System.out.println(response.getBody());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         catch (Exception e){
             System.out.println("SOMETHING WRONG!!"+e.toString());
