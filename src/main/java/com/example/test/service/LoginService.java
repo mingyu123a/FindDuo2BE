@@ -14,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static com.example.test.entity.Authority.ROLE_USER;
@@ -36,6 +37,9 @@ public class LoginService {
     private UserRepository userRepository;
     @Autowired
     private TokenProvider tokenProvider;
+
+    @Autowired
+    private MatchHistoryService matchHistoryService;
     public String NormalSignUp(String id1, String pw1, String nickname1,String tier1, String riot_id1) {
         final boolean isExistEmail = userRepository.existsByLoginId(id1);
         final boolean isExistNickname = userRepository.existsByNickname1(id1);
@@ -58,6 +62,15 @@ public class LoginService {
             System.out.println(encodedPwd);
             userEntity.setPassword(encodedPwd);
             userEntity.setNickname(nickname1);
+
+            //ㅎㅇㅌ
+            String input = "학교벽넘어감#KR2";
+            String[] parts = input.split("#");
+            String nickname = parts[0];
+            String tag = parts[1];
+            String puuid = matchHistoryService.getPuuid(nickname, tag);
+            matchHistoryService.getEncryptedSummonerId(puuid);
+
             userEntity.setTier(tier1);
             userEntity.setRiotId(riot_id1);
             userRepository.save(userEntity);
