@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/find/findduo").permitAll()
                                 .requestMatchers("/api/config").permitAll()
                                 .requestMatchers("/oauth/callback").permitAll()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                         );
         JwtFilter jwtFilter = new JwtFilter(tokenProvider);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
