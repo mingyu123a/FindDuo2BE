@@ -1,5 +1,8 @@
 package com.example.test.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.json.JsonObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -58,6 +61,28 @@ public class RsoService {
                         String.class
                 );
                 System.out.println(response.getBody());
+                String body = response.getBody();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(body);
+
+
+                // 각 요소 추출
+                accessToken = jsonNode.get("access_token").asText();
+                System.out.println("ACCESSTOKEN: "+accessToken);
+                String refreshToken = jsonNode.get("refresh_token").asText();
+                String scope = jsonNode.get("scope").asText();
+                String idToken = jsonNode.get("id_token").asText();
+                String tokenType = jsonNode.get("token_type").asText();
+                int expiresIn = jsonNode.get("expires_in").asInt();
+
+                HttpHeaders getUserInfoHeaders = new HttpHeaders();
+                getUserInfoHeaders.setBearerAuth(accessToken);  // "Authorization" 헤더에 "Bearer <accessToken>" 형식으로 설정됨
+                HttpEntity<String> getUserInfoEntity = new HttpEntity<>(headers);
+
+
+                ResponseEntity<String> userInfoResponse = restTemplate.exchange(USER_INFO_URL, HttpMethod.GET, getUserInfoEntity, String.class);
+                System.out.println("User Info Response: " + userInfoResponse.getBody());
+
 
             } catch (Exception e) {
                 e.printStackTrace();
