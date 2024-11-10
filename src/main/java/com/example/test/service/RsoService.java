@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class RsoService {
     private String RIOT_AUTH_URL = "https://auth.riotgames.com";
-    private static final String USER_INFO_URL = "https://auth.riotgames.com/riot/account/v1/accounts/me";
+    private static final String USER_INFO_URL = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/me";
 
     public void getRsoInfo(String code) throws Exception {
         try {//Auth코드로 AccessToken과 RefreshToken을 받는 작업.
@@ -43,9 +43,6 @@ public class RsoService {
             String body = responseEntity.getBody();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(body);
-
-
-            // 각 요소 추출
             String accessToken = jsonNode.get("access_token").asText();
             System.out.println("ACCESSTOKEN: "+accessToken);
             String refreshToken = jsonNode.get("refresh_token").asText();
@@ -57,9 +54,8 @@ public class RsoService {
             // 헤더 설정
             HttpHeaders headers2 = new HttpHeaders();
             headers2.setBearerAuth(accessToken);  // Bearer 토큰 설정
-            headers2.setContentType(MediaType.APPLICATION_JSON);
+            //headers2.setContentType(MediaType.APPLICATION_JSON);
 
-            // HttpEntity 생성 (요청 헤더 포함)
             HttpEntity<String> entity = new HttpEntity<>(headers2);
 
             try {
@@ -72,12 +68,7 @@ public class RsoService {
                 );
                 System.out.println(response.getBody());
 
-//
-//                HttpHeaders getUserInfoHeaders = new HttpHeaders();
-//                getUserInfoHeaders.setBearerAuth(accessToken);  // "Authorization" 헤더에 "Bearer <accessToken>" 형식으로 설정됨
-//                HttpEntity<String> getUserInfoEntity = new HttpEntity<>(getUserInfoHeaders);
-//                ResponseEntity<String> userInfoResponse = restTemplate.exchange(USER_INFO_URL, HttpMethod.GET, getUserInfoEntity, String.class);
-//                System.out.println("User Info Response: " + userInfoResponse.getBody());
+
 
 
             } catch (Exception e) {
