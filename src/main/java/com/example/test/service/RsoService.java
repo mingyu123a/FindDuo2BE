@@ -77,7 +77,7 @@ public class RsoService {
 
                 HttpHeaders getUserInfoHeaders = new HttpHeaders();
                 getUserInfoHeaders.setBearerAuth(accessToken);  // "Authorization" 헤더에 "Bearer <accessToken>" 형식으로 설정됨
-                HttpEntity<String> getUserInfoEntity = new HttpEntity<>(headers);
+                HttpEntity<String> getUserInfoEntity = new HttpEntity<>(getUserInfoHeaders);
 
 
                 ResponseEntity<String> userInfoResponse = restTemplate.exchange(USER_INFO_URL, HttpMethod.GET, getUserInfoEntity, String.class);
