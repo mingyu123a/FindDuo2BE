@@ -40,10 +40,20 @@ public class RsoService {
                     String.class
             );
 
-            String responseBody = responseEntity.getBody();
-            System.out.println(responseBody);
-            //accessToken 뽑아
-            String accessToken ="";
+            String body = responseEntity.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(body);
+
+
+            // 각 요소 추출
+            String accessToken = jsonNode.get("access_token").asText();
+            System.out.println("ACCESSTOKEN: "+accessToken);
+            String refreshToken = jsonNode.get("refresh_token").asText();
+            String scope = jsonNode.get("scope").asText();
+            String idToken = jsonNode.get("id_token").asText();
+            String tokenType = jsonNode.get("token_type").asText();
+            int expiresIn = jsonNode.get("expires_in").asInt();
+
             // 헤더 설정
             HttpHeaders headers2 = new HttpHeaders();
             headers2.setBearerAuth(accessToken);  // Bearer 토큰 설정
@@ -60,26 +70,14 @@ public class RsoService {
                         entity,
                         String.class
                 );
-//                System.out.println(response.getBody());
-                String body = response.getBody();
-                ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode jsonNode = objectMapper.readTree(body);
+                System.out.println(response.getBody());
 
-
-                // 각 요소 추출
-                accessToken = jsonNode.get("access_token").asText();
-                System.out.println("ACCESSTOKEN: "+accessToken);
-                String refreshToken = jsonNode.get("refresh_token").asText();
-                String scope = jsonNode.get("scope").asText();
-                String idToken = jsonNode.get("id_token").asText();
-                String tokenType = jsonNode.get("token_type").asText();
-                int expiresIn = jsonNode.get("expires_in").asInt();
-
-                HttpHeaders getUserInfoHeaders = new HttpHeaders();
-                getUserInfoHeaders.setBearerAuth(accessToken);  // "Authorization" 헤더에 "Bearer <accessToken>" 형식으로 설정됨
-                HttpEntity<String> getUserInfoEntity = new HttpEntity<>(getUserInfoHeaders);
-                ResponseEntity<String> userInfoResponse = restTemplate.exchange(USER_INFO_URL, HttpMethod.GET, getUserInfoEntity, String.class);
-                System.out.println("User Info Response: " + userInfoResponse.getBody());
+//
+//                HttpHeaders getUserInfoHeaders = new HttpHeaders();
+//                getUserInfoHeaders.setBearerAuth(accessToken);  // "Authorization" 헤더에 "Bearer <accessToken>" 형식으로 설정됨
+//                HttpEntity<String> getUserInfoEntity = new HttpEntity<>(getUserInfoHeaders);
+//                ResponseEntity<String> userInfoResponse = restTemplate.exchange(USER_INFO_URL, HttpMethod.GET, getUserInfoEntity, String.class);
+//                System.out.println("User Info Response: " + userInfoResponse.getBody());
 
 
             } catch (Exception e) {
