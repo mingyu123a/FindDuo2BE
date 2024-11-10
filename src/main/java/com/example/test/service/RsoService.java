@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class RsoService {
     private String RIOT_AUTH_URL = "https://auth.riotgames.com";
-    private static final String USER_INFO_URL = "https://auth.riotgames.com/userinfo";
+    private static final String USER_INFO_URL = "https://auth.riotgames.com/riot/account/v1/accounts/me";
 
     public void getRsoInfo(String code) throws Exception {
         try {//Auth코드로 AccessToken과 RefreshToken을 받는 작업.
