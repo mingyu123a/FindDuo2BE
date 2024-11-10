@@ -36,6 +36,7 @@ dependencies {
 	implementation 'org.glassfish:jakarta.json:2.0.1' // Reference implementation
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13' // If using Apache HttpClient
 
+
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-crypto:5.7.1'
 

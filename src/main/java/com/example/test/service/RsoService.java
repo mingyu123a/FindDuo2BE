@@ -57,8 +57,8 @@ public class RsoService {
                         entity,
                         String.class
                 );
-
                 System.out.println(response.getBody());
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
