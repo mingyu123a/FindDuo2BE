@@ -22,7 +22,7 @@ public class RsoController {
         System.out.println("Authrization code:"+authCode);
         String msg = rsoService.RsoSignUp(authCode);
         if(msg == "성공"){
-           return "redirect:http://findd.findduo.site";
+           return "redirect:https://findd.findduo.site";
         }
         return "실패";
     }
