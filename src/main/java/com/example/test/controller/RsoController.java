@@ -20,6 +20,6 @@ public class RsoController {
     public void getRsoAuthCode(HttpServletRequest request)throws Exception{//httpServletRequest객체로 uil내의 파라미터,. path 등에 접근 가능
         String authCode = request.getParameter("code");//getParameter 메서드를 통해 auth 코드 가져옴
         System.out.println("Authrization code:"+authCode);
-        rsoService.getRsoInfo(authCode);
+        rsoService.RsoSignUp(authCode);
     }
 }
