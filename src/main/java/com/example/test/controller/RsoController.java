@@ -17,9 +17,13 @@ public class RsoController {
     @Autowired
     private RsoService rsoService;
     @GetMapping("callback")
-    public void getRsoAuthCode(HttpServletRequest request)throws Exception{//httpServletRequest객체로 uil내의 파라미터,. path 등에 접근 가능
+    public String getRsoAuthCode(HttpServletRequest request)throws Exception{//httpServletRequest객체로 uil내의 파라미터,. path 등에 접근 가능
         String authCode = request.getParameter("code");//getParameter 메서드를 통해 auth 코드 가져옴
         System.out.println("Authrization code:"+authCode);
-        rsoService.RsoSignUp(authCode);
+        String msg = rsoService.RsoSignUp(authCode);
+        if(msg == "성공"){
+           return "redirect:http://findd.findduo.site";
+        }
+        return "실패";
     }
 }
